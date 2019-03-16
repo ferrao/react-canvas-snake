@@ -3,16 +3,11 @@ import PropTypes from 'prop-types';
 
 class Segment extends PureComponent {
     static propTypes = {
-        paint: PropTypes.func,
-        clear: PropTypes.func,
+        paint: PropTypes.func.isRequired,
+        clear: PropTypes.func.isRequired,
 
         row: PropTypes.number.isRequired,
         col: PropTypes.number.isRequired
-    }
-
-    static defaultProps = {
-        paint: () => {},
-        clear: () => {}
     }
 
     componentDidMount() {
