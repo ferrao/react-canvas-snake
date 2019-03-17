@@ -38,6 +38,7 @@ class Snake extends PureComponent {
     };
 
     state = {
+        direction: direction.RIGHT,
         segments: [
             {
                 row: this.props.row,
@@ -66,10 +67,10 @@ class Snake extends PureComponent {
         requestAnimationFrame(this.tick);
     }
 
-    move = () => {
+    move() {
         this.setState(prevState => {
             const [...segments] = prevState.segments;
-            const { deltaRow, deltaCol } = direction.RIGHT;
+            const { deltaRow, deltaCol } = prevState.direction;
 
             const head = segments[0];
             const tail = segments.pop();
@@ -80,10 +81,11 @@ class Snake extends PureComponent {
             segments.unshift(tail);
 
             return {
+                ...prevState,
                 segments
             };
         });
-    };
+    }
 
     render() {
         const { segments } = this.state;
