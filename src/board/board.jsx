@@ -18,6 +18,7 @@ class Board extends PureComponent {
     componentDidMount() {
         const canvas = this.ref.current;
 
+        // make canvas use all container space
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
 
@@ -46,7 +47,7 @@ class Board extends PureComponent {
     };
 
     render() {
-        const segment = React.cloneElement(this.props.children, {
+        const snake = React.cloneElement(this.props.children, {
             paint: this.paint,
             clear: this.clear
         });
@@ -54,7 +55,7 @@ class Board extends PureComponent {
         return (
             <Fragment>
                 <canvas className="canvas-snake" ref={this.ref} />
-                {segment}
+                {snake}
             </Fragment>
         );
     }
