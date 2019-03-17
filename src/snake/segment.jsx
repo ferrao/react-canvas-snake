@@ -8,16 +8,18 @@ class Segment extends PureComponent {
 
         row: PropTypes.number.isRequired,
         col: PropTypes.number.isRequired
-    }
+    };
 
     componentDidMount() {
         const { col, row } = this.props;
 
-        // make sure the whole tree is mounted and 
+        // make sure the whole tree is mounted and
         // canvas exists before painting
-        requestAnimationFrame(function() {
-            this.props.paint(row, col);
-        }.bind(this));
+        requestAnimationFrame(
+            function() {
+                this.props.paint(row, col);
+            }.bind(this)
+        );
     }
 
     componentDidUpdate(prevProps) {
@@ -34,4 +36,3 @@ class Segment extends PureComponent {
 }
 
 export default Segment;
-

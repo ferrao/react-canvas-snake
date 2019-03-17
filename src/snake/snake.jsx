@@ -10,20 +10,22 @@ class Snake extends PureComponent {
 
         row: PropTypes.number.isRequired,
         col: PropTypes.number.isRequired
-    }
+    };
 
     static defaultProps = {
         delay: 0,
         paint: () => {},
         clear: () => {}
-    }
+    };
 
     state = {
-        segments: [{
-            row: this.props.row,
-            col: this.props.col
-        }]
-    }
+        segments: [
+            {
+                row: this.props.row,
+                col: this.props.col
+            }
+        ]
+    };
 
     tick = () => {
         --this.rafCounter;
@@ -34,7 +36,7 @@ class Snake extends PureComponent {
         }
 
         requestAnimationFrame(this.tick);
-    }
+    };
 
     componentDidMount() {
         this.rafCounter = this.props.delay;
@@ -54,17 +56,15 @@ class Snake extends PureComponent {
         const { segments } = this.state;
         return (
             <Fragment>
-                { 
-                    segments.map((segment, index) => 
-                        <Segment 
-                            key={index}
-                            row={segment.row} 
-                            col={segment.col}
-                            paint={this.props.paint}
-                            clear={this.props.clear}
-                        />
-                    )
-                }
+                {segments.map((segment, index) => (
+                    <Segment
+                        key={index}
+                        row={segment.row}
+                        col={segment.col}
+                        paint={this.props.paint}
+                        clear={this.props.clear}
+                    />
+                ))}
             </Fragment>
         );
     }

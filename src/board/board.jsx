@@ -8,7 +8,7 @@ class Board extends PureComponent {
         rows: PropTypes.number.isRequired,
 
         children: PropTypes.node.isRequired
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -38,15 +38,14 @@ class Board extends PureComponent {
     paint = (row, col) => {
         const { x, y, width, height } = this.toRectangle(row, col);
         this.ctx.fillRect(x, y, width, height);
-    }
+    };
 
     clear = (row, col) => {
         const { x, y, width, height } = this.toRectangle(row, col);
         this.ctx.clearRect(x, y, width, height);
-    }
+    };
 
     render() {
-
         const segment = React.cloneElement(this.props.children, {
             paint: this.paint,
             clear: this.clear
@@ -55,9 +54,9 @@ class Board extends PureComponent {
         return (
             <Fragment>
                 <canvas className="canvas-snake" ref={this.ref} />
-                { segment }
+                {segment}
             </Fragment>
-        )
+        );
     }
 }
 
