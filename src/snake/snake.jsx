@@ -2,6 +2,25 @@ import React, { Fragment, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Segment from './segment';
 
+const direction = {
+    UP: {
+        deltaRow: -1,
+        deltaCol: 0
+    },
+    RIGHT: {
+        deltaRow: 0,
+        deltaCol: 1
+    },
+    DOWN: {
+        deltaRow: 1,
+        deltaCol: 0
+    },
+    LEFT: {
+        deltaRow: 0,
+        deltaCol: -1
+    }
+};
+
 class Snake extends PureComponent {
     static propTypes = {
         delay: PropTypes.number,
@@ -20,6 +39,10 @@ class Snake extends PureComponent {
 
     state = {
         segments: [
+            {
+                row: this.props.row,
+                col: this.props.col + 1
+            },
             {
                 row: this.props.row,
                 col: this.props.col
@@ -43,14 +66,24 @@ class Snake extends PureComponent {
         requestAnimationFrame(this.tick);
     }
 
-    move() {
-        this.setState(prevState => ({
-            segments: prevState.segments.map(segment => ({
-                row: segment.row + 1,
-                col: segment.col + 1
-            }))
-        }));
-    }
+    move = () => {
+        this.setState(prevState => {
+            const [...segments] = prevState.segments;
+            const { deltaRow, deltaCol } = direction.RIGHT;
+
+            const head = segments[0];
+            const tail = segments.pop();
+
+            // tail is now the new head
+            tail.row = head.row + deltaRow;
+            tail.col = head.col + deltaCol;
+            segments.unshift(tail);
+
+            return {
+                segments
+            };
+        });
+    };
 
     render() {
         const { segments } = this.state;
