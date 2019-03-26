@@ -1,25 +1,7 @@
 import React, { Fragment, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Segment from './segment';
-
-const direction = {
-    UP: {
-        deltaRow: -1,
-        deltaCol: 0
-    },
-    RIGHT: {
-        deltaRow: 0,
-        deltaCol: 1
-    },
-    DOWN: {
-        deltaRow: 1,
-        deltaCol: 0
-    },
-    LEFT: {
-        deltaRow: 0,
-        deltaCol: -1
-    }
-};
+import { propTypes as directionPropTypes } from '../direction';
 
 class Snake extends PureComponent {
     static propTypes = {
@@ -27,8 +9,9 @@ class Snake extends PureComponent {
         paint: PropTypes.func,
         clear: PropTypes.func,
 
-        row: PropTypes.number.isRequired,
-        col: PropTypes.number.isRequired
+        direction: directionPropTypes.isRequired,
+        startRow: PropTypes.number.isRequired,
+        startCol: PropTypes.number.isRequired
     };
 
     static defaultProps = {
@@ -38,15 +21,14 @@ class Snake extends PureComponent {
     };
 
     state = {
-        direction: direction.RIGHT,
         segments: [
             {
-                row: this.props.row,
-                col: this.props.col + 1
+                row: this.props.startRow,
+                col: this.props.startCol + 1
             },
             {
-                row: this.props.row,
-                col: this.props.col
+                row: this.props.startRow,
+                col: this.props.startCol
             }
         ]
     };
@@ -70,7 +52,7 @@ class Snake extends PureComponent {
     move() {
         this.setState(prevState => {
             const [...segments] = prevState.segments;
-            const { deltaRow, deltaCol } = prevState.direction;
+            const { deltaRow, deltaCol } = this.props.direction;
 
             const head = segments[0];
             const tail = segments.pop();
