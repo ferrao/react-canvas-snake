@@ -10,6 +10,10 @@ class Board extends PureComponent {
         children: PropTypes.node.isRequired
     };
 
+    state = {
+        invalidPaint: false
+    };
+
     constructor(props) {
         super(props);
         this.ref = React.createRef();
@@ -29,6 +33,8 @@ class Board extends PureComponent {
         this.cellHeight = canvas.height / this.props.rows;
     }
 
+    inBounds = (row, col) => row >= 0 && row < this.props.rows && col >= 0 && col < this.props.cols;
+
     toRectangle = (row, col) => ({
         x: (col % this.props.cols) * this.cellWidth,
         y: (row % this.props.rows) * this.cellHeight,
@@ -37,6 +43,14 @@ class Board extends PureComponent {
     });
 
     paint = (row, col) => {
+        if (!this.inBounds(row, col)) {
+            this.setState({
+                invalidPaint: true
+            });
+
+            return;
+        }
+
         const { x, y, width, height } = this.toRectangle(row, col);
         this.ctx.fillRect(x, y, width, height);
     };
@@ -49,7 +63,8 @@ class Board extends PureComponent {
     render() {
         const snake = React.cloneElement(this.props.children, {
             paint: this.paint,
-            clear: this.clear
+            clear: this.clear,
+            crash: this.state.invalidPaint
         });
 
         return (

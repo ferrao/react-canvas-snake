@@ -12,8 +12,8 @@ class Game extends PureComponent {
         direction: direction.DOWN
     };
 
-    setDirection(direction) {
-        this.setState({ direction });
+    setDirection(newDirection) {
+        this.setState({ direction: newDirection });
     }
 
     render() {
@@ -25,12 +25,7 @@ class Game extends PureComponent {
                 <KeyHandler keyValue={key.LEFT} onKey={() => this.setDirection(direction.LEFT)} />
 
                 <Board cols={COLS} rows={ROWS}>
-                    <Snake
-                        startRow={ROWS / 2}
-                        startCol={COLS / 2}
-                        delay={10}
-                        direction={this.state.direction}
-                    />
+                    <Snake startRow={ROWS / 2} startCol={COLS / 2} delay={10} direction={this.state.direction} />
                 </Board>
             </Fragment>
         );

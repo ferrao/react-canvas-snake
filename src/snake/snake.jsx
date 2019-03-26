@@ -8,6 +8,7 @@ class Snake extends PureComponent {
         delay: PropTypes.number,
         paint: PropTypes.func,
         clear: PropTypes.func,
+        crash: PropTypes.bool,
 
         direction: directionPropTypes.isRequired,
         startRow: PropTypes.number.isRequired,
@@ -16,6 +17,7 @@ class Snake extends PureComponent {
 
     static defaultProps = {
         delay: 0,
+        crash: false,
         paint: () => {},
         clear: () => {}
     };
@@ -33,7 +35,22 @@ class Snake extends PureComponent {
         ]
     };
 
+    componentDidMount() {
+        this.rafCounter = this.props.delay;
+        this.requestId = requestAnimationFrame(this.tick);
+    }
+
+    componentDidUpdate() {
+        if (this.props.crash && this.requestId) {
+            cancelAnimationFrame(this.requestId);
+        }
+    }
+
     tick = () => {
+        if (this.props.crash) {
+            return;
+        }
+
         --this.rafCounter;
 
         if (!this.rafCounter) {
@@ -41,13 +58,8 @@ class Snake extends PureComponent {
             this.move();
         }
 
-        requestAnimationFrame(this.tick);
+        this.requestId = requestAnimationFrame(this.tick);
     };
-
-    componentDidMount() {
-        this.rafCounter = this.props.delay;
-        requestAnimationFrame(this.tick);
-    }
 
     move() {
         this.setState(prevState => {
@@ -75,6 +87,7 @@ class Snake extends PureComponent {
             <Fragment>
                 {segments.map((segment, index) => (
                     <Segment
+                        /* eslint-disable react/no-array-index-key */
                         key={index}
                         row={segment.row}
                         col={segment.col}
