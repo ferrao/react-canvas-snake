@@ -8,7 +8,7 @@ class Snake extends PureComponent {
         delay: PropTypes.number,
         paint: PropTypes.func,
         clear: PropTypes.func,
-        crash: PropTypes.bool,
+        move: PropTypes.bool,
 
         direction: directionPropTypes.isRequired,
         startRow: PropTypes.number.isRequired,
@@ -17,7 +17,7 @@ class Snake extends PureComponent {
 
     static defaultProps = {
         delay: 0,
-        crash: false,
+        move: false,
         paint: () => {},
         clear: () => {}
     };
@@ -40,26 +40,50 @@ class Snake extends PureComponent {
         this.requestId = requestAnimationFrame(this.tick);
     }
 
-    componentDidUpdate() {
-        if (this.props.crash && this.requestId) {
-            cancelAnimationFrame(this.requestId);
+    componentDidUpdate(prevProps) {
+        // stop any ongoing animations if snake should not move
+        if (!this.props.move) {
+            this.cancelTick();
+        }
+
+        // snake was stopped and has been instructed to move
+        if (this.props.move && !prevProps.move) {
+            this.requestId = requestAnimationFrame(this.tick);
         }
     }
 
+    componentWillUnmount() {
+        // snake removed from dom, stop any ongoing animations
+        this.cancelTick();
+    }
+
     tick = () => {
-        if (this.props.crash) {
-            return;
+        // move snake if delay has elapsed
+        if (this.shouldMove()) {
+            this.move();
         }
 
+        // schedule a new tick only if component is still mounted
+        if (this.requestId) {
+            this.requestId = requestAnimationFrame(this.tick);
+        }
+    };
+
+    cancelTick() {
+        cancelAnimationFrame(this.requestId);
+        this.requestId = null;
+    }
+
+    shouldMove() {
         --this.rafCounter;
 
         if (!this.rafCounter) {
             this.rafCounter = this.props.delay;
-            this.move();
+            return true;
         }
 
-        this.requestId = requestAnimationFrame(this.tick);
-    };
+        return false;
+    }
 
     move() {
         this.setState(prevState => {

@@ -6,12 +6,13 @@ class Board extends PureComponent {
     static propTypes = {
         cols: PropTypes.number.isRequired,
         rows: PropTypes.number.isRequired,
+        onCrash: PropTypes.func,
 
         children: PropTypes.node.isRequired
     };
 
-    state = {
-        invalidPaint: false
+    static defaultProps = {
+        onCrash: () => {}
     };
 
     constructor(props) {
@@ -44,10 +45,7 @@ class Board extends PureComponent {
 
     paint = (row, col) => {
         if (!this.inBounds(row, col)) {
-            this.setState({
-                invalidPaint: true
-            });
-
+            this.props.onCrash();
             return;
         }
 
@@ -63,8 +61,7 @@ class Board extends PureComponent {
     render() {
         const snake = React.cloneElement(this.props.children, {
             paint: this.paint,
-            clear: this.clear,
-            crash: this.state.invalidPaint
+            clear: this.clear
         });
 
         return (
