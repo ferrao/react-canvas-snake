@@ -10,8 +10,18 @@ const ROWS = 20;
 class Game extends PureComponent {
     state = {
         direction: direction.DOWN,
+        size: 10,
         crash: false
     };
+
+    componentDidMount() {
+        setInterval(() => {
+            this.setState(prevState => ({
+                ...prevState,
+                size: prevState.size + 3
+            }));
+        }, 5000);
+    }
 
     setCrash = () => this.setState({ crash: true });
 
@@ -20,7 +30,7 @@ class Game extends PureComponent {
     }
 
     render() {
-        const { crash } = this.state;
+        const { crash, size } = this.state;
         return (
             <Fragment>
                 <KeyHandler keyValue={key.UP} onKey={() => this.setDirection(direction.UP)} />
@@ -36,6 +46,7 @@ class Game extends PureComponent {
                             startRow={ROWS / 2}
                             startCol={COLS / 2}
                             delay={10}
+                            size={size}
                             direction={this.state.direction}
                             move
                         />

@@ -21,6 +21,7 @@
         "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }],
         "func-names": ["error", "as-needed"],
         "no-nested-ternary": "off",
+        "no-shadow": "off",
         "jsx-a11y/anchor-is-valid": [
             "error",
             {

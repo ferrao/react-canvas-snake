@@ -26,8 +26,8 @@ class Segment extends PureComponent {
         const { col: prevCol, row: prevRow } = prevProps;
         const { col, row } = this.props;
 
-        this.props.paint(row, col);
         this.props.clear(prevRow, prevCol);
+        this.props.paint(row, col);
     }
 
     render() {

@@ -19,10 +19,12 @@ const direction = {
     }
 };
 
+const isReverse = direction => direction.deltaRow < 0 || direction.deltaCol < 0;
+
 const propTypes = PropTypes.shape({
     deltaRow: PropTypes.number.isRequired,
     deltaCol: PropTypes.number.isRequired
 });
 
 export default direction;
-export { propTypes };
+export { isReverse, propTypes };
